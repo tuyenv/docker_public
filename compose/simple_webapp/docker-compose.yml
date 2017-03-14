@@ -1,0 +1,34 @@
+version: '2'
+services:
+  nginxphp70:
+    image: vdthutech/nginx_php70
+    container_name: nginxphp70
+    ports:
+      - "8001:80"
+    volumes:
+      - /Volumes/www/debug/docker_project_01:/var/www
+      - /Volumes/www/docker/base_nginx_php70/log_nginx:/var/log/nginx
+
+  mysql56:
+    image: mysql:5.6
+    container_name: mysql56
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - /Volumes/www/docker/base_nginx_php70/mysql56:/var/lib/mysql
+
+  phpmyadmin46:
+    image: phpmyadmin/phpmyadmin:4.6
+    container_name: phpmyadmin46
+    restart: always
+    depends_on:
+      - mysql56
+    links:
+      - mysql56:db
+    ports:
+      - 8101:80
+    environment:
+      MYSQL_USERNAME: root
+      MYSQL_ROOT_PASSWORD: root
